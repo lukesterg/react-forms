@@ -1,11 +1,14 @@
 import React from 'react';
 import { BooleanFormLayout } from './BooleanFormLayout';
 import { useStandardControl } from './standardControl';
+import * as types from '../types';
 import { StandardFormLayout } from './StandardFormLayout';
 // @ts-ignore
 import * as scrub from '@framed/scrub';
 
-export const InputWidget = (inputProps: React.InputHTMLAttributes<HTMLInputElement>): GeneratedField => (props) => {
+export const InputWidget = (inputProps: React.InputHTMLAttributes<HTMLInputElement>): types.GeneratedField => (
+  props
+) => {
   const isCheckbox = inputProps.type === 'checkbox';
 
   const defaultInputOptions = useStandardControl({

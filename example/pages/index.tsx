@@ -46,8 +46,8 @@ export default function Home() {
       <Form
         schema={schema}
         defaults={{ textFieldWithDefaultValue: 'default value' }}
-        onValidated={validated}
-        onValidationError={console.error}
+        onValidated={(e) => console.log('validated', e)}
+        onValidationError={(e) => console.error('validation error', e)}
         horizontal={{ labelClass: 'col-sm-2', valueClass: 'col-sm-10' }}
       />
     </>

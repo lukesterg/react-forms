@@ -1,6 +1,7 @@
 import React from 'react';
+import * as types from '../types';
 
-export const BooleanFormLayout: React.FC<FieldGeneratorOptions> = (props) => {
+export const BooleanFormLayout: React.FC<types.FieldGeneratorOptions> = (props) => {
   if (props.horizontal) {
     return (
       <div className="row mb-3">

@@ -5,8 +5,8 @@ import { form, useForm } from '@framed/forms';
 const australianStates = ['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
 
 const schema = scrub.object({
-  addressLine1: form({ label: 'Address Line 1' })(scrub.string()),
-  addressLine2: form({ label: 'Address Line 2' })(scrub.string({ empty: true })),
+  addressLine1: form({ formLabel: 'Address Line 1' })(scrub.string()),
+  addressLine2: form({ formLabel: 'Address Line 2' })(scrub.string({ empty: true })),
   city: scrub.string(),
   state: form({ selectFrom: [''].concat(australianStates) })(scrub.string({ choices: australianStates })),
   postcode: scrub.string(),

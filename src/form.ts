@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { normalizedChoices } from './choices';
+import * as types from './types';
 // @ts-ignore
 import * as scrub from '@framed/scrub';
 
@@ -18,19 +19,19 @@ const normalizeLabel = (label: string) => {
 };
 
 const appendOptionalLabelIfRequired = (label: string, field: any) => {
-  return (field as scrub.StringOptions).empty === true && (field as FieldDeclarationOptions).enabled !== false
+  return (field as scrub.StringOptions).empty === true && (field as types.FieldDeclarationOptions).enabled !== false
     ? `${label} (optional)`
     : label;
 };
 
-export const form = (value: FieldDeclarationOptions = {}) => <Type extends scrub.Field>(instance: Type) => {
+export const form = (value: types.FieldDeclarationOptions = {}) => <Type extends scrub.Field>(instance: Type) => {
   const selectFrom = normalizedChoices(instance, value.selectFrom);
-  return Object.assign(instance, value, { selectFrom }) as Type & FieldDeclarationOptions;
+  return Object.assign(instance, value, { selectFrom }) as Type & types.FieldDeclarationOptions;
 };
 
-const useFormInputs = (formDefaults: () => any): FormInput => {
+const useFormInputs = (formDefaults: () => any): types.FormInput => {
   const [form, setForm] = useState<any>(formDefaults);
-  const [errors, setErrors] = useState<FormStateErrorType>({});
+  const [errors, setErrors] = useState<types.FormStateErrorType>({});
   const clearErrors = () => setErrors({});
 
   const reset = () => {
@@ -65,13 +66,13 @@ const useFormInputs = (formDefaults: () => any): FormInput => {
   };
 };
 
-interface FormOptions<SchemaType extends ScrubObject> extends Partial<FormEvents>, FieldOptions {
+interface FormOptions<SchemaType extends types.ScrubObject> extends Partial<types.FormEvents>, types.FieldOptions {
   schema: SchemaType;
-  generator?: FieldGenerator;
-  defaults?: { [key in SchemaKeys<SchemaType>]?: string };
+  generator?: types.FieldGenerator;
+  defaults?: { [key in types.SchemaKeys<SchemaType>]?: string };
 }
 
-const validateOneField = <SchemaType extends ScrubObject>(
+const validateOneField = <SchemaType extends types.ScrubObject>(
   options: FormOptions<SchemaType>,
   form: any,
   field: keyof SchemaType
@@ -84,14 +85,14 @@ const validateOneField = <SchemaType extends ScrubObject>(
   return validationField.validate(form, { throwOnFailure: false });
 };
 
-const eventPrecedence: { [key in FormEventType]: number } = {
+const eventPrecedence: { [key in types.FormEventType]: number } = {
   submit: 0,
   blur: 1,
   change: 2,
 };
 
-const sanitizeFormEvents = (value: Partial<FormEvents>): FormEvents => {
-  const result: FormEvents = {
+const sanitizeFormEvents = (value: Partial<types.FormEvents>): types.FormEvents => {
+  const result: types.FormEvents = {
     validateFieldEvent: 'submit',
     validateFieldErrorEvent: 'change',
     ...value,
@@ -110,14 +111,16 @@ const generateFormDefaults = (keys: string[]) =>
     return obj;
   }, {} as any);
 
-export const generateFields = <SchemaType extends ScrubObject>(
-  options: BaseFormProperties<SchemaType> & FieldOptions
-): { [key in keyof SchemaType]: UserGeneratedField } => {
+export const generateFields = <SchemaType extends types.ScrubObject>(
+  options: types.BaseFormProperties<SchemaType> & types.FieldOptions
+): { [key in keyof SchemaType]: types.UserGeneratedField } => {
   return Object.keys(options.form.schema.fields).reduce((current, key) => {
-    const field = options.form.schema.fields[key] as FieldDeclarationOptions;
+    // because typing is stuffed because of peerDependencies and Typescript this needs to be any
+    const field: any = options.form.schema.fields[key];
+
     const component = options.generator!(field);
 
-    current[key] = (props: Partial<FieldGeneratorOptions>) =>
+    current[key] = (props: Partial<types.FieldGeneratorOptions>) =>
       component({
         ...options,
         fieldId: key,
@@ -125,9 +128,9 @@ export const generateFields = <SchemaType extends ScrubObject>(
         formLabel: appendOptionalLabelIfRequired(field.formLabel || normalizeLabel(key), field),
         value: options.form.form[key],
         error: options.form.errors[key],
-        field,
+        field: field as scrub.Field,
         form: options.form,
-        selectFrom: (field.selectFrom as any) as NormalizedChoice[],
+        selectFrom: (field.selectFrom as any) as types.NormalizedChoice[],
         horizontal: options.horizontal,
         helpText: field.helpText || '',
         placeholder: field.placeholder || '',
@@ -139,9 +142,9 @@ export const generateFields = <SchemaType extends ScrubObject>(
   }, {} as any);
 };
 
-export const useForm = <SchemaType extends ScrubObject>(
+export const useForm = <SchemaType extends types.ScrubObject>(
   options: FormOptions<SchemaType>
-): UseFormReturn<SchemaType> => {
+): types.UseFormReturn<SchemaType> => {
   const state = useFormInputs(() => ({
     ...generateFormDefaults(Object.keys(options.schema.fields)),
     ...options.defaults,
@@ -154,7 +157,7 @@ export const useForm = <SchemaType extends ScrubObject>(
     state.setFieldError(result.error || '', field as string);
   };
 
-  const triggerEvent = (field: SchemaKeys<SchemaType>, value: any, event: FormEventType) => {
+  const triggerEvent = (field: types.SchemaKeys<SchemaType>, value: any, event: types.FormEventType) => {
     state.setFieldValue(value, field as string);
 
     if (
@@ -171,7 +174,7 @@ export const useForm = <SchemaType extends ScrubObject>(
     ...state,
     schema: options.schema,
     triggerEvent,
-    validate: (throwOnError = false) => {
+    validate: (throwOnError: boolean = false) => {
       try {
         state.clearErrors();
         return options.schema.validate(state.form, { throwOnFailure: true }) as scrub.GetType<SchemaType>;
@@ -207,14 +210,14 @@ export const useForm = <SchemaType extends ScrubObject>(
 
   return {
     ...result,
-    fields,
+    fields: fields as any,
   };
 };
 
-export interface FormComponentOptions<SchemaType extends ScrubObject>
+export interface FormComponentOptions<SchemaType extends types.ScrubObject>
   extends FormOptions<SchemaType>,
-    Omit<BaseFormProperties<SchemaType>, 'form'>,
-    FieldOptions {
+    Omit<types.BaseFormProperties<SchemaType>, 'form'>,
+    types.FieldOptions {
   onValidated: (value: scrub.GetType<SchemaType>) => void;
   onValidationError?: (error: scrub.ObjectValidatorError<SchemaType>) => void;
   fields?: string[];

@@ -1,10 +1,11 @@
+import * as types from './types';
 // @ts-ignore
 import type * as scrub from '@framed/scrub';
 
 export const normalizedChoices = (
   validator: scrub.Field,
-  choices: UserChoices | undefined
-): NormalizedChoice[] | undefined => {
+  choices: types.UserChoices | undefined
+): types.NormalizedChoice[] | undefined => {
   if (!choices) {
     return;
   }
@@ -17,7 +18,10 @@ export const normalizedChoices = (
   return result;
 };
 
-const calculateNormalizedValues = (validator: scrub.Field, choices: UserChoices): NormalizedChoice[] | undefined => {
+const calculateNormalizedValues = (
+  validator: scrub.Field,
+  choices: types.UserChoices
+): types.NormalizedChoice[] | undefined => {
   if (choices === undefined || choices === true) {
     choices = (validator as scrub.StringValidator).choices as string[];
   }
@@ -35,12 +39,12 @@ const calculateNormalizedValues = (validator: scrub.Field, choices: UserChoices)
     return [];
   }
 
-  return (optGroups as [string, StandardChoices][]).map(
-    ([key, value]) => [key, attemptToNormalizeStandardChoices(value)] as NormalizedChoice
+  return (optGroups as [string, types.StandardChoices][]).map(
+    ([key, value]) => [key, attemptToNormalizeStandardChoices(value)] as types.NormalizedChoice
   );
 };
 
-const attemptToNormalizeStandardChoices = (choices: UserChoices): [string, any][] | undefined => {
+const attemptToNormalizeStandardChoices = (choices: types.UserChoices): [string, any][] | undefined => {
   if (!Array.isArray(choices)) {
     // Must be an object. It can only be StandardChoices if every value is a string.
     if (Object.values(choices).some((choice) => typeof choice !== 'string')) {

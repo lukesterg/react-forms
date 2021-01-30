@@ -1,8 +1,9 @@
 import React from 'react';
 import { useStandardControl } from './standardControl';
 import { StandardFormLayout } from './StandardFormLayout';
+import * as types from '../types';
 
-export const SelectWidget: React.FC<FieldGeneratorOptions> = (props) => {
+export const SelectWidget: React.FC<types.FieldGeneratorOptions> = (props) => {
   const defaultInputOptions = useStandardControl({
     generatorOptions: props,
     additionalClasses: 'form-select',
@@ -21,7 +22,7 @@ export const SelectWidget: React.FC<FieldGeneratorOptions> = (props) => {
     </option>
   );
 
-  const generateOptionGroup: (params: NormalizedChoice) => JSX.Element | JSX.Element[] = ([name, options]) => {
+  const generateOptionGroup: (params: types.NormalizedChoice) => JSX.Element | JSX.Element[] = ([name, options]) => {
     if (name === '') {
       return options.map(generateOption);
     }
