@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@framed/forms": "file:..",
-    "@framed/scrub": "0.0.1-alpha.3",
+    "@framed/scrub": "0.0.1-alpha.4",
     "bootstrap": "^5.0.0-beta1",
     "next": "10.0.5",
     "react": "17.0.1",
