@@ -21,6 +21,8 @@ export default function SimpleExample() {
 }
 ```
 
+[Edit on StackBlitz](https://stackblitz.com/edit/react-ts-vlkmva?file=index.tsx)
+
 ![Running through a form](docs/simple-demo.gif)
 
 # Documentation
@@ -28,6 +30,14 @@ export default function SimpleExample() {
 To install run `npm i @framed/forms @framed/scrub`. You will need to be load Bootstrap 5 to render the forms correctly.
 
 For validation please refer to [scrub documentation](https://scrub.readthedocs.io/en/latest/).
+
+Documentation is a work in progress, please see examples.
+
+# Editable examples
+
+- [Simple Example](https://stackblitz.com/edit/react-ts-vlkmva?file=index.tsx)
+- [Horizontal form with all field types](https://stackblitz.com/edit/react-ts-kgv6k5?file=index.tsx)
+- [Custom form layout](https://stackblitz.com/edit/react-ts-ur6dkr?file=index.tsx)
 
 # Using the code
 
