@@ -16,5 +16,18 @@ const schema = scrub.object({
 type SchemaType = scrub.GetType<typeof schema>;
 
 export default function Home() {
-  return <div />;
+  const validated = (e: SchemaType) => {
+    console.log(e);
+  };
+
+  return (
+    <>
+      <Form
+        schema={schema}
+        onValidated={validated}
+        onValidationError={console.error}
+        horizontal={{ labelClass: 'col-sm-2', valueClass: 'col-sm-10' }}
+      />
+    </>
+  );
 }
