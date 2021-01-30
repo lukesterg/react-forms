@@ -1,6 +1,10 @@
 # React Forms
 
-React forms is a simple form creation library which supports vertical, horizontal and custom layout forms.
+React forms is a simple form creation library which supports:
+
+- Form layouts: vertical, horizontal or custom.
+- Validation using the scrub library.
+- Customizing fields attributes such as id, label, placeholder, disabled and much more.
 
 ```js
 import React from 'react';
@@ -30,3 +34,7 @@ For validation please refer to [scrub documentation](https://scrub.readthedocs.i
 To setup the project for the first time run `npm i && npm i --prefix example`.
 
 Once the project is setup `npm run build` will build the project into lib and `npm run dev` will start a webserver on port 3000 for development.
+
+```
+
+```

@@ -1,7 +1,8 @@
 import React from 'react';
+import * as types from '../types';
 
 export interface StandardControlOptions {
-  generatorOptions: FieldGeneratorOptions;
+  generatorOptions: types.FieldGeneratorOptions;
   additionalClasses: string;
   onAdd?: (value: any) => any;
 }

@@ -3,10 +3,11 @@ import * as form from './form';
 import { SelectWidget } from './components/SelectWidget';
 import { InputWidget } from './components/InputWidget';
 export { form } from './form';
+import * as types from './types';
 // @ts-ignore
 import * as scrub from '@framed/scrub';
 
-const widgetSelectors: { [key: string]: GeneratedField } = {
+const widgetSelectors: { [key: string]: types.GeneratedField } = {
   number: InputWidget({ type: 'text', inputMode: 'numeric' }),
   email: InputWidget({ type: 'email' }),
   password: InputWidget({ type: 'password' }),
@@ -16,7 +17,7 @@ const widgetSelectors: { [key: string]: GeneratedField } = {
 };
 const defaultWidget = InputWidget({ type: 'text' });
 
-const BootstrapWidgetSelector: React.FC<FieldGeneratorOptions> = (props) => {
+const BootstrapWidgetSelector: React.FC<types.FieldGeneratorOptions> = (props) => {
   if (props.selectFrom) {
     return SelectWidget(props);
   }
@@ -32,7 +33,7 @@ const BootstrapWidgetSelector: React.FC<FieldGeneratorOptions> = (props) => {
   return defaultWidget(props);
 };
 
-const bootstrapGenerator: GeneratedField = (props) => <BootstrapWidgetSelector {...props} />;
+const bootstrapGenerator: types.GeneratedField = (props) => <BootstrapWidgetSelector {...props} />;
 
 export const useForm: typeof form.useForm = (options) =>
   form.useForm({
@@ -40,7 +41,7 @@ export const useForm: typeof form.useForm = (options) =>
     generator: (field) => options.generator?.(field) || bootstrapGenerator,
   });
 
-export const Form = <SchemaType extends ScrubObject>(options: form.FormComponentOptions<SchemaType>) => {
+export const Form = <SchemaType extends types.ScrubObject>(options: form.FormComponentOptions<SchemaType>) => {
   const form = useForm(options);
 
   const submitButton =
@@ -53,7 +54,7 @@ export const Form = <SchemaType extends ScrubObject>(options: form.FormComponent
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      options.onValidated(form.validate(true));
+      options.onValidated(form.validate(true)!);
     } catch (e) {
       if (!(e instanceof scrub.ObjectValidatorError)) {
         console.error('unexpected error', e);
@@ -65,7 +66,7 @@ export const Form = <SchemaType extends ScrubObject>(options: form.FormComponent
   };
 
   const fields = (options.fields || Object.keys(form.fields)).map((key) =>
-    ((form.fields as any)[key] as UserGeneratedField)({ key })
+    ((form.fields as any)[key] as types.UserGeneratedField)({ key })
   );
   const innerContent = (
     <>
