@@ -66,6 +66,7 @@ export interface FieldDeclarationOptions {
   enabled?: boolean;
   helpText?: string;
   placeholder?: string;
+  hideOptional?: boolean;
 }
 
 export interface FieldGeneratorOptions<SchemaType extends ScrubObject = ScrubObject>

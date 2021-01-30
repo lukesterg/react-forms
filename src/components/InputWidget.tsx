@@ -10,6 +10,12 @@ export const InputWidget = (inputProps: React.InputHTMLAttributes<HTMLInputEleme
   props
 ) => {
   const isCheckbox = inputProps.type === 'checkbox';
+  let { value } = props;
+
+  if (isCheckbox && value === '') {
+    value = false;
+    props.form.triggerEvent(props.fieldId, value, 'change');
+  }
 
   const defaultInputOptions = useStandardControl({
     generatorOptions: props,

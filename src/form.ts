@@ -19,7 +19,9 @@ const normalizeLabel = (label: string) => {
 };
 
 const appendOptionalLabelIfRequired = (label: string, field: any) => {
-  return (field as scrub.StringOptions).empty === true && (field as types.FieldDeclarationOptions).enabled !== false
+  return (field as scrub.StringOptions).empty === true &&
+    (field as types.FieldDeclarationOptions).enabled !== false &&
+    (field as types.FieldDeclarationOptions).hideOptional !== true
     ? `${label} (optional)`
     : label;
 };
@@ -134,6 +136,7 @@ export const generateFields = <SchemaType extends types.ScrubObject>(
         horizontal: options.horizontal,
         helpText: field.helpText || '',
         placeholder: field.placeholder || '',
+        hideOptional: field.hideOptional || false,
         enabled: field.enabled!,
         customInput: options.customInput,
         ...props,
