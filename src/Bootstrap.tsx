@@ -11,7 +11,7 @@ const widgetSelectors: { [key: string]: GeneratedField } = {
   email: InputWidget({ type: 'email' }),
   password: InputWidget({ type: 'password' }),
   date: InputWidget({ type: 'date' }),
-  boolean: InputWidget({ type: 'checkbox', className: 'form-check-input' }),
+  boolean: InputWidget({ type: 'checkbox' }),
   uri: InputWidget({ type: 'url' }),
 };
 const defaultWidget = InputWidget({ type: 'text' });
@@ -53,7 +53,7 @@ export const Form = <SchemaType extends ScrubObject>(options: form.FormComponent
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      options.onValidated(form.validate());
+      options.onValidated(form.validate(true));
     } catch (e) {
       if (!(e instanceof scrub.ObjectValidatorError)) {
         console.error('unexpected error', e);

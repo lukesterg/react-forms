@@ -30,7 +30,7 @@ type TriggerEvent = (event: FormEventType, value: any) => void;
 
 interface UseFormReturn<SchemaType extends ScrubObject> extends FormInput {
   schema: SchemaType;
-  validate: () => scrub.GetType<SchemaType>;
+  validate: (throwOnError: boolean) => scrub.GetType<SchemaType>;
   triggerEvent: (field: SchemaKeys<SchemaType>, value: any, event: FormEventType) => void;
   fields: { [key in keyof SchemaType]: UserGeneratedField };
 }
@@ -55,6 +55,8 @@ interface FieldDeclarationOptions {
   formId?: string;
   selectFrom?: UserChoices;
   enabled?: boolean;
+  helpText?: string;
+  placeholder?: string;
 }
 
 interface FieldGeneratorOptions<SchemaType extends ScrubObject = ScrubObject>

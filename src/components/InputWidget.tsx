@@ -1,18 +1,19 @@
 import React from 'react';
 import { BooleanFormLayout } from './BooleanFormLayout';
 import { useStandardControl } from './standardControl';
+import { StandardFormLayout } from './StandardFormLayout';
 // @ts-ignore
 import * as scrub from '@framed/scrub';
-import { StandardFormLayout } from './StandardFormLayout';
 
 export const InputWidget = (inputProps: React.InputHTMLAttributes<HTMLInputElement>): GeneratedField => (props) => {
+  const isCheckbox = inputProps.type === 'checkbox';
+
   const defaultInputOptions = useStandardControl({
     generatorOptions: props,
-    additionalClasses: 'form-control',
+    additionalClasses: isCheckbox ? 'form-check-input' : 'form-control',
   });
 
   const stringField = (props.field as unknown) as Partial<scrub.StringOptions>;
-  const isCheckbox = inputProps.type === 'checkbox';
   const checkboxHtmlAttributes = isCheckbox ? { checked: props.value === true, value: 'true' } : {};
   const getValue = (e: React.ChangeEvent<HTMLInputElement>) =>
     isCheckbox ? e.currentTarget.checked : e.currentTarget.value;
@@ -27,8 +28,10 @@ export const InputWidget = (inputProps: React.InputHTMLAttributes<HTMLInputEleme
     onBlur: (e) => props.form.triggerEvent(props.fieldId, getValue(e), 'blur'),
     value: props.value,
     disabled: props.enabled === false,
+    placeholder: props.placeholder,
     ...checkboxHtmlAttributes,
     ...inputProps,
+    className: [defaultInputOptions.className, inputProps.className].filter((i) => i).join(' '),
   };
 
   const inputElement = props.customInput ? <props.customInput {...inputOptions} /> : <input {...inputOptions} />;

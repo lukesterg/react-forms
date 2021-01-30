@@ -17,6 +17,12 @@ const normalizeLabel = (label: string) => {
   return upperCaseFirst(camelCaseToSpace);
 };
 
+const appendOptionalLabelIfRequired = (label: string, field: any) => {
+  return (field as scrub.StringOptions).empty === true && (field as FieldDeclarationOptions).enabled !== false
+    ? `${label} (optional)`
+    : label;
+};
+
 export const form = (value: FieldDeclarationOptions = {}) => <Type extends scrub.Field>(instance: Type) => {
   const selectFrom = normalizedChoices(instance, value.selectFrom);
   return Object.assign(instance, value, { selectFrom }) as Type & FieldDeclarationOptions;
@@ -116,13 +122,15 @@ export const generateFields = <SchemaType extends ScrubObject>(
         ...options,
         fieldId: key,
         formId: field.formId || key,
-        formLabel: field.formLabel || normalizeLabel(key),
+        formLabel: appendOptionalLabelIfRequired(field.formLabel || normalizeLabel(key), field),
         value: options.form.form[key],
         error: options.form.errors[key],
         field,
         form: options.form,
         selectFrom: (field.selectFrom as any) as NormalizedChoice[],
         horizontal: options.horizontal,
+        helpText: field.helpText || '',
+        placeholder: field.placeholder || '',
         enabled: field.enabled!,
         customInput: options.customInput,
         ...props,
@@ -163,13 +171,19 @@ export const useForm = <SchemaType extends ScrubObject>(
     ...state,
     schema: options.schema,
     triggerEvent,
-    validate: () => {
+    validate: (throwOnError = false) => {
       try {
         state.clearErrors();
         return options.schema.validate(state.form, { throwOnFailure: true }) as scrub.GetType<SchemaType>;
       } catch (e) {
+        console.error(e);
+
         if (!(e instanceof scrub.ObjectValidatorError)) {
-          throw e;
+          if (throwOnError) {
+            throw e;
+          }
+
+          return;
         }
 
         const errors = fromEntries(
@@ -178,7 +192,10 @@ export const useForm = <SchemaType extends ScrubObject>(
             .map(([key, value]) => [key, value as string])
         );
         state.setErrors(errors as any);
-        throw e;
+
+        if (throwOnError) {
+          throw e;
+        }
       }
     },
   };

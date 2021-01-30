@@ -9,6 +9,7 @@ export const StandardFormLayout: React.FC<FieldGeneratorOptions> = (props) => {
         </label>
         <div className={props.horizontal.valueClass}>
           {props.children}
+          {props.helpText && <div className="invalid-form-text text-muted">{props.helpText}</div>}
           {props.error && <div className="invalid-feedback">{props.error}</div>}
         </div>
       </div>
@@ -21,6 +22,7 @@ export const StandardFormLayout: React.FC<FieldGeneratorOptions> = (props) => {
         {props.formLabel}
       </label>
       {props.children}
+      {props.helpText && <div className="invalid-form-text text-muted">{props.helpText}</div>}
       {props.error && <div className="invalid-feedback">{props.error}</div>}
     </div>
   );

@@ -11,6 +11,7 @@ export const BooleanFormLayout: React.FC<FieldGeneratorOptions> = (props) => {
             <label htmlFor={props.formId} className="form-check-label">
               {props.formLabel}
             </label>
+            {props.helpText && <div className="invalid-form-text text-muted">{props.helpText}</div>}
             {props.error && <div className="invalid-feedback">{props.error}</div>}
           </div>
         </div>
@@ -24,6 +25,7 @@ export const BooleanFormLayout: React.FC<FieldGeneratorOptions> = (props) => {
       <label htmlFor={props.formId} className="form-check-label">
         {props.formLabel}
       </label>
+      {props.helpText && <div className="invalid-form-text text-muted">{props.helpText}</div>}
       {props.error && <div className="invalid-feedback">{props.error}</div>}
     </div>
   );
