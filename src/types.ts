@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as scrub from '@framed/scrub';
 
 export type ScrubObject = scrub.ObjectValidator<any, unknown>;
