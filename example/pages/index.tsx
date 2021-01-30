@@ -31,10 +31,6 @@ const schema = scrub.object({
 type SchemaType = scrub.GetType<typeof schema>;
 
 export default function Home() {
-  const validated = (e: SchemaType) => {
-    console.log(e);
-  };
-
   return (
     <>
       <p>
@@ -43,6 +39,9 @@ export default function Home() {
 
       <h2>Horizontal form demo</h2>
       <p>This demo demonstrates all the different field types in a horizontal form layout</p>
+      <p>
+        <strong>Please open your JavaScript console to see the output.</strong>
+      </p>
       <Form
         schema={schema}
         defaults={{ textFieldWithDefaultValue: 'default value' }}
