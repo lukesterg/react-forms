@@ -8,7 +8,7 @@ export interface FieldOptions {
     labelClass: string;
     valueClass: string;
   };
-  customInput?: (options: React.InputHTMLAttributes<HTMLInputElement>) => JSX.Element;
+  customInput?: React.FC;
   inputOnly?: boolean;
 }
 
@@ -66,6 +66,7 @@ export interface FieldDeclarationOptions {
   enabled?: boolean;
   helpText?: string;
   placeholder?: string;
+  hideOptional?: boolean;
 }
 
 export interface FieldGeneratorOptions<SchemaType extends ScrubObject = ScrubObject>
