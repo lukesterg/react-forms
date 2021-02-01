@@ -8,7 +8,7 @@ export interface FieldOptions {
     labelClass: string;
     valueClass: string;
   };
-  customInput?: (options: React.InputHTMLAttributes<HTMLInputElement>) => JSX.Element;
+  customInput?: React.FC;
   inputOnly?: boolean;
 }
 
